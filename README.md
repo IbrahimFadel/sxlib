@@ -26,3 +26,5 @@ int main()
     return 0;
 }
 ```
+
+Thanks to https://github.com/abainbridge/x11_socket & https://github.com/freedesktop/xcb-libxcb for helping me get started :)
