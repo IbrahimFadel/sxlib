@@ -9,11 +9,36 @@
 #define u32 uint32_t
 #define u64 uint64_t
 
+// Opcodes
 #define X11_OPCODE_CREATE_WINDOW 1
+#define X11_OPCODE_CHANGE_WINDOW_ATTRIBUTES 2
+#define X11_OPCODE_GET_WINDOW_ATTRIBUTES 3
+#define X11_OPCODE_DESTROY_WINDOW 4
 #define X11_OPCODE_MAP_WINDOW 8
+#define X11_OPCODE_UNMAP_WINDOW 10
+#define X11_OPCODE_CHANGE_PROPERTY 18
 #define X11_OPCODE_CREATE_GC 55
 
-#define X11_CW_BACK_PIXEL 1 << 1
+// Bitmasks
+#define X11_BACKGROUND_PIXMAP 0x00000001
+#define X11_BACKGROUND_PIXEL 0x00000002
+#define X11_BORDER_PIXMAP 0x00000004
+#define X11_BORDER_PIXEL 0x00000008
+#define X11_BIT_GRAVITY 0x00000010
+#define X11_WIN_GRAVITY 0x00000020
+#define X11_BACKING_STORE 0x00000040
+#define X11_BACKING_PLANES 0x00000080
+#define X11_BACKING_PIXEL 0x00000100
+#define X11_OVERRIDE_REDIRECT 0x00000200
+#define X11_SAVE_UNDER 0x00000400
+#define X11_EVENT_MASK 0x00000800
+#define X11_DO_NOT_PROPOGATE_MASK 0x00001000
+#define X11_COLORMAP 0x00002000
+#define X11_CURSOR 0x00004000
+
+#define XA_WM_CLASS 67
+#define XA_STRING 31
+
 #define X11_GC_GRAPHICS_EXPOSURES 1 << 16
 #define X11_EXPOSURES_NOT_ALLOWED 0
 
@@ -102,5 +127,46 @@ typedef struct sxlib_window_t
     u16 width, height;
     int has_error;
 } sxlib_window_t;
+
+typedef struct sxlib_reply_t
+{
+    u8 reply;
+    u8 backing_store;
+    u16 sequence_number;
+    u32 reply_length;
+} sxlib_reply_t;
+
+typedef struct sxlib_window_attributes_t
+{
+    u32 visual;
+    u16 window_class;
+    u8 bit_gravity;
+    u8 win_gravity;
+    u32 backing_planes;
+    u32 packing_pixel;
+    u8 save_under;
+    u8 map_is_installed;
+    u8 map_state;
+    u8 override_redirect;
+    u32 colormap;
+    u32 all_event_masks;
+    u32 your_event_masks;
+    u16 do_not_propogate_mask;
+    u16 pad0;
+} sxlib_window_attributes_t;
+
+typedef struct sxlib_change_property_request_t
+{
+    u8 opcode;
+    u8 mode;
+    u16 req_len;
+    u32 window;
+    u32 property;
+    u32 type;
+    u8 format;
+    u8 pad0, pad1, pad2;
+    u32 data_len;
+    u32 *data;
+} sxlib_change_property_request_t;
 
 #endif
